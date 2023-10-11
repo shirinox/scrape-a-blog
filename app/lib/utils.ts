@@ -1,5 +1,7 @@
+import { env } from './getenv';
+
 export const WSA_URL = 'https://wsa-test.vercel.app';
-export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = env.BASE_URL;
 
 export const GOOD_WORDS = [
 	'good',

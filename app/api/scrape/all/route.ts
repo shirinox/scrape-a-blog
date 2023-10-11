@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
 import * as cheerio from 'cheerio';
+import chromium from '@sparticuz/chromium-min';
 
 import { BASE_URL, WSA_URL, analyzeText } from '@/app/lib/utils';
 
@@ -21,7 +22,14 @@ export const GET = async (res: NextRequest) => {
 	const words: boolean = Boolean(searchParams.get('words'));
 
 	// load puppeteer and navigate to website
-	const browser = await puppeteer.launch({ headless: 'new' });
+	const browser = await puppeteer.launch({
+		args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
+		executablePath: await chromium.executablePath(
+			`https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
+		),
+		headless: chromium.headless,
+		ignoreHTTPSErrors: true,
+	});
 	const wsaPage = await browser.newPage();
 	await wsaPage.goto(WSA_URL);
 	await wsaPage.waitForSelector('main');
