@@ -6,7 +6,7 @@ const SearchBar = ({ setArticle }: { setArticle: Dispatch<SetStateAction<string>
 	return (
 		<>
 			<p className='text-center mt-16 text-xs m-0.5 text-zinc-700'>
-				Input a link to scrape a specific article or scrape all of them by clicking "Scrape"
+				Input a link to scrape a specific article or scrape all of them by clicking &quot;Scrape&quot;
 			</p>
 			<div className='bg-zinc-200 w-fit p-4 rounded-full flex gap-2 relative mx-auto  mb-4 text-xs items-center md:text-lg'>
 				<Search className='text-zinc-600' />
