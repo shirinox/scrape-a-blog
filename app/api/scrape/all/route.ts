@@ -31,6 +31,11 @@ export const GET = async (res: NextRequest) => {
 		ignoreHTTPSErrors: true,
 	});
 	const wsaPage = await browser.newPage();
+	await wsaPage.setRequestInterception(true);
+	wsaPage.on('request', (request) => {
+		if (['stylesheet', 'font'].includes(request.resourceType())) request.abort();
+		else request.continue();
+	});
 	await wsaPage.goto(WSA_URL);
 	await wsaPage.waitForSelector('main');
 
