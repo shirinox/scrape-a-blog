@@ -62,22 +62,6 @@ export default function Home() {
 			</p>
 			<div>
 				<SearchBar setArticle={setArticle} />
-				<div className='flex gap-6 justify-center my-4'>
-					<label>
-						Disable words counting
-						<input
-							onChange={() => {
-								setEnableWords(!enableWords);
-								console.log(enableWords);
-							}}
-							type='checkbox'
-						/>
-					</label>
-					<label>
-						Disable sentiment fetching?
-						<input onChange={() => setEnableSentiment(!enableSentiment)} type='checkbox' />
-					</label>
-				</div>
 
 				<Button
 					onClick={(e: MouseEvent) => handleClick(e)}

@@ -51,10 +51,8 @@ export const GET = async (res: NextRequest) => {
 	const content = articleContentElem.map((i, el) => $(el).text()).toArray();
 	const contentString = content.join(' ');
 
-	let wordCount: number = 0;
-	if (words) wordCount = contentString.split(' ').length;
-	let sentiment: string = '';
-	if (rating) sentiment = analyzeText(contentString);
+	const wordCount = contentString.split(' ').length;
+	const sentiment = analyzeText(contentString);
 
 	if (!content || !title || !topic)
 		return NextResponse.json({ error: 'No article content was found.' }, { status: 400 });
