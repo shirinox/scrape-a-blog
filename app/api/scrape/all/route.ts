@@ -13,6 +13,7 @@ export type Article = {
 	link: string | undefined;
 	image: string | undefined;
 	sentiment: string | undefined;
+	words: number | undefined;
 };
 
 export const GET = async (res: NextRequest) => {
@@ -68,6 +69,7 @@ export const GET = async (res: NextRequest) => {
 				sentiment: articleData.sentiment,
 				link: WSA_URL + link,
 				image: WSA_URL + image,
+				words: articleData.wordCount,
 			};
 		})
 	);

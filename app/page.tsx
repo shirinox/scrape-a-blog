@@ -62,6 +62,23 @@ export default function Home() {
 			</p>
 			<div>
 				<SearchBar setArticle={setArticle} />
+				<div className='flex gap-6 justify-center my-4'>
+					<label>
+						Disable words counting
+						<input
+							onChange={() => {
+								setEnableWords(!enableWords);
+								console.log(enableWords);
+							}}
+							type='checkbox'
+						/>
+					</label>
+					<label>
+						Disable sentiment fetching?
+						<input onChange={() => setEnableSentiment(!enableSentiment)} type='checkbox' />
+					</label>
+				</div>
+
 				<Button
 					onClick={(e: MouseEvent) => handleClick(e)}
 					className='bg-zinc-800 text-white font-semibold px-4 py-1.5 rounded-full mx-auto block '
@@ -70,7 +87,7 @@ export default function Home() {
 				</Button>
 			</div>
 			{isLoading && (
-				<div className='mx-auto'>
+				<div className='mx-auto my-4'>
 					<Loader2 className='animate-spin w-10 h-10 m-2 mx-auto' />
 					<p className='text-center'>Scraping data...</p>
 				</div>

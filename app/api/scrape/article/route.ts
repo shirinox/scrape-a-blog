@@ -49,12 +49,13 @@ export const GET = async (res: NextRequest) => {
 	const topic = $('body > div > div > div > div > div > div > div:nth-child(1)').text();
 	const articleContentElem = $('body > div > div > div > div > div > div > div:nth-child(3) > div');
 	const content = articleContentElem.map((i, el) => $(el).text()).toArray();
-
-	const wordCount = content.join(' ').split(' ').length;
-
 	const contentString = content.join(' ');
 
-	const sentiment = analyzeText(contentString);
+	let wordCount: number = 0;
+	if (words) wordCount = contentString.split(' ').length;
+	let sentiment: string = '';
+	if (rating) sentiment = analyzeText(contentString);
+
 	if (!content || !title || !topic)
 		return NextResponse.json({ error: 'No article content was found.' }, { status: 400 });
 	else
