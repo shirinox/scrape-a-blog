@@ -4,13 +4,14 @@ import * as cheerio from 'cheerio';
 
 import { BASE_URL, WSA_URL, analyzeText } from '@/app/lib/utils';
 
-type Article = {
+export type Article = {
 	title: string | undefined;
 	topic: string | undefined;
 	author: string | undefined;
 	short_description: string | undefined;
 	link: string | undefined;
 	image: string | undefined;
+	sentiment: string | undefined;
 };
 
 export const GET = async (res: NextRequest) => {
@@ -58,9 +59,5 @@ export const GET = async (res: NextRequest) => {
 		})
 	);
 
-	// return response
-	return NextResponse.json({
-		articles: articlesData,
-		success: articlesData.length > 0 ? true : false,
-	});
+	return NextResponse.json(articlesData, { status: 200 });
 };

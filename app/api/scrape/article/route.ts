@@ -3,17 +3,26 @@ import { NextRequest, NextResponse } from 'next/server';
 import puppeteer from 'puppeteer';
 import * as cheerio from 'cheerio';
 
+export type ArticleContent = {
+	title: string | undefined;
+	content: string[] | undefined;
+	wordCount: number | undefined;
+	sentiment: string | undefined;
+	topic: string | undefined;
+};
+
 export const GET = async (res: NextRequest) => {
 	const { searchParams } = res.nextUrl;
 	const rating: boolean = Boolean(searchParams.get('rating'));
 	const words: boolean = Boolean(searchParams.get('words'));
 
 	const article = searchParams.get('article') as string;
+	if (!article) return NextResponse.json({ error: 'No article parameter was provided.' }, { status: 400 });
 
 	const browser = await puppeteer.launch({ headless: 'new' });
 	const wsaArticlePage = await browser.newPage();
 	console.log(WSA_URL + article);
-	await wsaArticlePage.goto(WSA_URL + article);
+	await wsaArticlePage.goto(WSA_URL + '/' + article);
 	await wsaArticlePage.waitForSelector('body > div > div');
 
 	const htmlContent = await wsaArticlePage.content();
@@ -30,6 +39,13 @@ export const GET = async (res: NextRequest) => {
 	const contentString = content.join(' ');
 
 	const sentiment = analyzeText(contentString);
-
-	return NextResponse.json({ title, content, wordCount, sentiment, topic, success: content.length > 0 });
+	if (!content || !title || !topic)
+		return NextResponse.json({ error: 'No article content was found.' }, { status: 400 });
+	else
+		return NextResponse.json(
+			{ title, content, wordCount, sentiment, topic, success: content.length > 0 },
+			{
+				status: 200,
+			}
+		);
 };
