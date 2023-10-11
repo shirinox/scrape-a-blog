@@ -1,7 +1,8 @@
 import { WSA_URL, analyzeText } from '@/app/lib/utils';
 import { NextRequest, NextResponse } from 'next/server';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
 import * as cheerio from 'cheerio';
+import chromium from '@sparticuz/chromium-min';
 
 export const GET = async (res: NextRequest) => {
 	const { searchParams } = res.nextUrl;
@@ -10,7 +11,17 @@ export const GET = async (res: NextRequest) => {
 
 	const article = searchParams.get('article') as string;
 
-	const browser = await puppeteer.launch({ headless: 'new' });
+	// ? might be better to return status instead of success
+	if (!article) return NextResponse.json({ error: 'No article parameter provided.', success: false });
+
+	const browser = await puppeteer.launch({
+		args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
+		executablePath: await chromium.executablePath(
+			`https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
+		),
+		headless: 'new',
+		ignoreHTTPSErrors: true,
+	});
 	const wsaArticlePage = await browser.newPage();
 	console.log(WSA_URL + article);
 	await wsaArticlePage.goto(WSA_URL + article);
